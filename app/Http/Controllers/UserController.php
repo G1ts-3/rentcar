@@ -71,7 +71,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
 {
-    // Validation rules
+  
     $validated = $request->validate([
         'nik' => 'required|unique:users,nik,' . $user->id,
         'name' => 'required',
@@ -79,26 +79,26 @@ class UserController extends Controller
         'number_phone' => 'required',
         'username' => 'required|unique:users,username,' . $user->id,
         'password' => 'nullable|min:6',
-        'role' => 'required|in:admin,member', // Allow both admin and member roles
+        'role' => 'required|in:admin,member', 
     ]);
 
-    // If password is set, hash it
+   
     if (isset($validated['password'])) {
         $validated['password'] = Hash::make($validated['password']);
     } else {
-        unset($validated['password']); // Remove password if not set
+        unset($validated['password']); 
     }
 
-    // Check if the logged-in user is trying to update their own role to 'member'
+   
     if (auth()->user()->id === $user->id && $validated['role'] === 'member') {
         return redirect()->route('admin.users.index')
             ->with('error', 'Maaf anda tidak bisa mengganti role anda ke member.');
     }
 
-    // Admins are allowed to change other admins' roles to member
+    
     $user->update($validated);
 
-    // Redirect back with success message
+    
     return redirect()->route('admin.users.index')
         ->with('success', 'Data anggota berhasil diperbarui');
 }
@@ -111,19 +111,19 @@ class UserController extends Controller
      */
     public function destroy(User $user)
 {
-    // Cek jika pengguna yang akan dihapus adalah admin
+    
     if ($user->role === 'admin') {
         return redirect()->route('admin.users.index')
             ->with('error', 'Tidak dapat menghapus admin');
     }
 
-    // Cek jika pengguna memiliki peminjaman aktif
+    
     if ($user->transactions()->where('status', 'ongoing')->exists()) {
         return redirect()->route('admin.users.index')
             ->with('error', 'Tidak dapat menghapus anggota yang memiliki peminjaman aktif');
     }
 
-    // Hapus pengguna
+    
     $user->delete();
 
     return redirect()->route('admin.users.index')

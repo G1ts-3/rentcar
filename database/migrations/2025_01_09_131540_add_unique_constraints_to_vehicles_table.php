@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->unique('plate_number');
-        });
+        try {
+            Schema::table('vehicles', function (Blueprint $table) {
+                $table->unique('plate_number');
+            });
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Unique constraint already exists from create_vehicles_table migration
+        }
     }
 
     /**

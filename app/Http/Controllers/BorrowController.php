@@ -17,7 +17,6 @@ class BorrowController extends Controller
     $hasActiveTransaction = false;
 
     if (auth()->user()->role === 'member') {
-        // Check if the user has any active transaction
         $hasActiveTransaction = Transaction::where('user_id', auth()->id())
             ->whereIn('status', ['ongoing', 'pending'])
             ->exists();
@@ -30,15 +29,13 @@ class BorrowController extends Controller
         return view('member.borrow.index', compact('availableVehicles', 'userTransactions', 'hasActiveTransaction'));
     }
 
-    // For admin dashboard
+    
     $transactions = Transaction::with(['user', 'vehicle'])->get();
     return view('admin.transactions.index', compact('transactions'));
 }
 
 
-    /**
-     * Show the form for creating a new resource (Admin only).
-     */
+
     public function create()
     {
         $vehicles = Vehicles::where('status', 'available')->get();
@@ -46,9 +43,7 @@ class BorrowController extends Controller
         return view('admin.transactions.create', compact('vehicles', 'users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -63,7 +58,7 @@ class BorrowController extends Controller
                 return back()->with('error', 'Kendaraan sudah tidak tersedia');
             }
 
-            // Create a new transaction
+            
             Transaction::create([
                 'user_id' => auth()->id(),
                 'vehicle_id' => $validated['vehicle_id'],
@@ -99,9 +94,7 @@ class BorrowController extends Controller
             ->with('newTransaction', $transaction);
     }
 
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(Transaction $transaction)
     {
         $transaction->load(['user', 'vehicle']);
@@ -112,9 +105,7 @@ class BorrowController extends Controller
         return back();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, Transaction $transaction)
     {
         $validated = $request->validate([
@@ -133,9 +124,7 @@ class BorrowController extends Controller
             ->with('success', 'Status transaksi berhasil diupdate');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   
     public function destroy(Transaction $transaction)
     {
         $transaction->vehicle->update(['status' => 'available']);

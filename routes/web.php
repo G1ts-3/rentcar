@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Authcontroller;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\Dashboardcontroller;
@@ -17,9 +18,7 @@ Route::post('/logout', [Authcontroller::class, 'logout'])->name('logout');
 
 
 Route::middleware(['auth', 'UserAkses:admin'])->prefix('admin')->name('admin.')->group(function() {
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('vehicles', VehicleController::class);
     Route::resource('transactions', TransactionController::class);
     Route::resource('users', UserController::class);

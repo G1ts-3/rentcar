@@ -38,7 +38,7 @@ class VehicleController extends Controller
         'status' => 'required|in:available,borrowed,maintenance'
     ]);
 
-    // Create the vehicle if validation passes
+  
     Vehicles::create($validated);
 
     return redirect()->route('admin.vehicles.index')->with('success', 'Kendaraan berhasil ditambahkan');
@@ -84,7 +84,7 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicles $vehicle)
     {
-        // Check if vehicle is currently in use
+        
         if ($vehicle->transaction()->where('status', 'borrowed')->exists()) {
             return back()->with('error', 'Kendaraan sedang dipinjam dan tidak dapat dihapus');
         }

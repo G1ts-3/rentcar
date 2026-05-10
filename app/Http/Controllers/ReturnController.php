@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class ReturnController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         $activeTransactions = Transaction::where('user_id', auth()->id())
@@ -21,17 +19,13 @@ class ReturnController extends Controller
         return view('member.return.index', compact('activeTransactions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([

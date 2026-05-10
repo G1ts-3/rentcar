@@ -85,12 +85,19 @@
             text-decoration: none;
         }
 
-        select.form-control {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 16px 12px;
+        select.form-select {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 0.8rem;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        select.form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
         }
     </style>
 </head>
@@ -99,32 +106,37 @@
         <h2 class="title">Daftar Akun Baru</h2>
         <form action="{{ route('register') }}" method="POST">
             @csrf
-            <div class="form-group">
+            <div class="mb-3">
                 <label class="form-label">NIK</label>
                 <input type="text" name="nik" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label class="form-label">Nama Lengkap</label>
                 <input type="text" name="name" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label class="form-label">Username</label>
                 <input type="text" name="username" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label class="form-label">Jabatan</label>
-                <input type="text" name="position" class="form-control" required>
+                <select name="position" class="form-select" required>
+                    <option value="" selected disabled>Pilih Jabatan</option>
+                    <option value="Guru">Guru</option>
+                    <option value="TPA">TPA</option>
+                    <option value="Kepala Urusan">Kepala Urusan</option>
+                </select>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label class="form-label">Nomor Telepon</label>
                 <input type="tel" name="number_phone" class="form-control" required>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" required>
                 <div class="help-text">Minimal 6 karakter</div>
@@ -137,5 +149,7 @@
             </div>
         </form>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
