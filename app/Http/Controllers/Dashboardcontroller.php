@@ -20,7 +20,12 @@ class Dashboardcontroller extends Controller
             return $transaction;
         });
 
-    return view('member.dashboard', compact('activeTransactions'));
+    $transactions = Transaction::where('user_id', auth()->id())
+        ->with(['vehicle'])
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return view('member.dashboard', compact('activeTransactions', 'transactions'));
 }
 
 }
